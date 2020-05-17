@@ -12,7 +12,7 @@ binance API responses that normally use lots of one letter property names. For m
 ```js
 const api = require('binance');
 const binanceRest = new api.BinanceRest({
-    key: 'api-key', // Get this from your account on binance.com
+    key: 'api-key', // Get this from your account on binance.je
     secret: 'api-secret', // Same for this
     timeout: 15000, // Optional, defaults to 15000, is the request time out in milliseconds
     recvWindow: 10000, // Optional, defaults to 5000, increase if you're getting timestamp errors
@@ -28,13 +28,13 @@ const binanceRest = new api.BinanceRest({
      * binance's server time, calculating the difference with your own clock, and then reattempting
      * the request.
      */
-    baseUrl: 'https://api.binance.com/',
+    baseUrl: 'https://api.binance.je/',
     /*
-     * Optional, default is 'https://api.binance.com/'. Can be useful in case default url stops working.
+     * Optional, default is 'https://api.binance.je/'. Can be useful in case default url stops working.
      * In february 2018, Binance had a major outage and when service started to be up again, only
-     * https://us.binance.com was working.
+     * https://us.binance.je was working.
      */
-    requestOptions: {}
+    requestOptions: {},
     /*
      * Options as supported by the 'request' library
      * For a list of available options, see:
@@ -45,12 +45,12 @@ const binanceRest = new api.BinanceRest({
 // You can use promises
 binanceRest
     .allOrders({
-        symbol: 'BNBBTC' // Object is transformed into a query string, timestamp is automatically added
+        symbol: 'BNBBTC', // Object is transformed into a query string, timestamp is automatically added
     })
-    .then(data => {
+    .then((data) => {
         console.log(data);
     })
-    .catch(err => {
+    .catch((err) => {
         console.error(err);
     });
 
@@ -75,15 +75,15 @@ binanceRest.allOrders('BNBBTC', (err, data) => {
  */
 const binanceWS = new api.BinanceWS(true); // Argument specifies whether the responses should be beautified, defaults to true
 
-binanceWS.onDepthUpdate('BNBBTC', data => {
+binanceWS.onDepthUpdate('BNBBTC', (data) => {
     console.log(data);
 });
 
-binanceWS.onAggTrade('BNBBTC', data => {
+binanceWS.onAggTrade('BNBBTC', (data) => {
     console.log(data);
 });
 
-binanceWS.onKline('BNBBTC', '1m', data => {
+binanceWS.onKline('BNBBTC', '1m', (data) => {
     console.log(data);
 });
 
@@ -98,9 +98,9 @@ binanceWS.onCombinedStream(
         streams.depth('BNBBTC'),
         streams.kline('BNBBTC', '5m'),
         streams.trade('BNBBTC'),
-        streams.ticker('BNBBTC')
+        streams.ticker('BNBBTC'),
     ],
-    streamEvent => {
+    (streamEvent) => {
         switch (streamEvent.stream) {
             case streams.depth('BNBBTC'):
                 console.log(
@@ -138,12 +138,12 @@ binanceWS.onCombinedStream(
 binanceWS
     .onUserData(
         binanceRest,
-        data => {
+        (data) => {
             console.log(data);
         },
         60000
     ) // Optional, how often the keep alive should be sent in milliseconds
-    .then(ws => {
+    .then((ws) => {
         // websocket instance available here
     });
 ```
@@ -326,11 +326,11 @@ The keep alive request needed to keep a user data websocket open. Will be automa
 
 Closes the user data stream.
 
-### **[allPrices([callback _function_])](https://www.binance.com/restapipub.html#user-content-market-data-endpoints)**
+### **[allPrices([callback _function_])](https://www.binance.je/restapipub.html#user-content-market-data-endpoints)**
 
 Returns the latest price for all symbols. This route appears on the old API document, but does not appear in the most recent set of docs. You should probably use `tickerPrice()` instead as it utilizes a route with a newer version.
 
-### **[allBookTickers([callback _function_])](https://www.binance.com/restapipub.html#user-content-market-data-endpoints)**
+### **[allBookTickers([callback _function_])](https://www.binance.je/restapipub.html#user-content-market-data-endpoints)**
 
 Returns the best price/qty on the order book for all symbols. This route appears on an old API document, but does not appear in the most recent set of docs. You should probably use `bookTicker()` instead as it utilizes a route with a newer version.
 
@@ -548,9 +548,9 @@ binanceWS.onCombinedStream(
         streams.aggTrade('BNBBTC'),
         streams.trade('BNBBTC'),
         streams.ticker('BNBBTC'),
-        streams.allTickers()
+        streams.allTickers(),
     ],
-    streamEvent => {
+    (streamEvent) => {
         switch (streamEvent.stream) {
             case streams.depth('BNBBTC'):
                 console.log('Depth Event', streamEvent.data);
@@ -655,7 +655,7 @@ const { ValueProcessor } = require('binance');
 
 ValueProcessor.processFilters(symbolInfo, {
     quantity: '30.000000001', // Also accepts 'number' values.
-    price: '0.00234414211'
+    price: '0.00234414211',
 });
 
 // {
